@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asistencia y Pizarra — 2DO INF "A" | U.E. Dr. Enrique Noboa Arízaga</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --primary-light: #ccfbf1;
+      --accent: #0284c7;
+      --p-bg: #dcfce7; --p-fg: #166534; --p-bd: #86efac;
+      --a-bg: #fef3c7; --a-fg: #92400e; --a-bd: #fcd34d;
+      --f-bg: #fee2e2; --f-fg: #991b1b; --f-bd: #fca5a5;
+      --j-bg: #e0f2fe; --j-fg: #075985; --j-bd: #7dd3fc;
+      --radius: 12px;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding-bottom: 48px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%);
+      color: #fff;
+      padding: 20px 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .inst-tag {
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #5eead4;
+      font-weight: 700;
+    }
+
+    header h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    .sub-info {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    .badge-course {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(94, 234, 212, 0.4);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      text-align: right;
+    }
+
+    .badge-course strong {
+      display: block;
+      font-size: 1.15rem;
+      color: #5eead4;
+    }
+
+    .badge-course span {
+      font-size: 0.82rem;
+      color: #e2e8f0;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 22px auto 0;
+      padding: 0 18px;
+    }
+
+    /* Navigation Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .tab-btn:hover { background: var(--surface-alt); border-color: #cbd5e1; }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+    }
+
+    /* Controls Bar */
+    .toolbar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label.field-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    input[type="date"], input[type="text"], select {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: var(--text);
+      background: #fff;
+    }
+
+    input[type="date"]:focus, input[type="text"]:focus, select:focus {
+      outline: 2px solid var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .day-pill {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: #0369a1; }
+    .btn-outline { background: #fff; border-color: #cbd5e1; color: var(--text); }
+    .btn-outline:hover { background: #f8fafc; }
+    .btn-danger { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+    .btn-danger:hover { background: #fecaca; }
+
+    /* KPI Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card .label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .stat-card .value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    /* Main Table Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    thead th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tbody tr:hover { background: #f8fafc; }
+
+    .num-col {
+      width: 48px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .student-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Attendance Status Buttons */
+    .att-group {
+      display: inline-flex;
+      gap: 5px;
+    }
+
+    .att-btn {
+      width: 34px;
+      height: 32px;
+      border-radius: 7px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      font-weight: 800;
+      font-size: 0.84rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.12s;
+    }
+
+    .att-btn:hover { border-color: #94a3b8; color: var(--text); }
+
+    .att-btn.active[data-val="P"] { background: var(--p-bg); color: var(--p-fg); border-color: var(--p-bd); }
+    .att-btn.active[data-val="A"] { background: var(--a-bg); color: var(--a-fg); border-color: var(--a-bd); }
+    .att-btn.active[data-val="F"] { background: var(--f-bg); color: var(--f-fg); border-color: var(--f-bd); }
+    .att-btn.active[data-val="J"] { background: var(--j-bg); color: var(--j-fg); border-color: var(--j-bd); }
+
+    /* Board / Pizarra Controls */
+    .board-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .score-chip {
+      padding: 5px 9px;
+      border-radius: 7px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .score-chip:hover { background: #f1f5f9; }
+    .score-chip.selected {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+
+    .count-pill {
+      display: inline-block;
+      min-width: 28px;
+      text-align: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 0.82rem;
+    }
+
+    .obs-input {
+      width: 100%;
+      min-width: 150px;
+      padding: 6px 10px !important;
+      font-size: 0.85rem !important;
+    }
+
+    /* Random Student Modal/Banner */
+    .random-banner {
+      display: none;
+      background: linear-gradient(135deg, #0284c7 0%, #0f766e 100%);
+      color: #fff;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.25);
+    }
+
+    .random-banner.show { display: flex; }
+
+    .hidden { display: none !important; }
+
+    .pill-pct {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .pct-high { background: #dcfce7; color: #166534; }
+    .pct-mid  { background: #fef3c7; color: #92400e; }
+    .pct-low  { background: #fee2e2; color: #991b1b; }
+
+    /* Print Styles */
+    @media print {
+      body { background: #fff; padding: 0; }
+      header { background: #fff !important; color: #000 !important; border-bottom: 2px solid #000; box-shadow: none; padding: 10px 0; }
+      .inst-tag, .sub-info, .badge-course strong, .badge-course span { color: #000 !important; }
+      .tabs, .toolbar, .no-print, .random-banner { display: none !important; }
+      .card { box-shadow: none; border: 1px solid #999; }
+      th, td { padding: 6px 8px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="inst-tag">Unidad Educativa "Dr. Enrique Noboa Arízaga" • La Troncal - Cañar</div>
+      <h1>Control de Asistencia y Pizarra — 2do Informática "A"</h1>
+      <div class="sub-info">Asignatura: Matemática • Docente: Msc. Edwin Lliguipuma E. • Año Lectivo 2026–2027</div>
+    </div>
+    <div class="badge-course">
+      <strong>2DO INF "A"</strong>
+      <span id="headerCount">30 Estudiantes Activos</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Tabs -->
+  <div class="tabs no-print">
+    <button class="tab-btn active" onclick="switchTab('diario', this)">📋 Registro Diario (Asistencia y Pizarra)</button>
+    <button class="tab-btn" onclick="switchTab('resumen', this)">📊 Consolidado General</button>
+    <button class="tab-btn" onclick="switchTab('nomina', this)">👥 Gestionar Nómina</button>
+  </div>
+
+  <!-- Random Picker Banner -->
+  <div id="randomBanner" class="random-banner no-print">
+    <div>
+      <div style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; opacity:0.9;">🎯 Estudiante Seleccionado para la Pizarra</div>
+      <div id="randomName" style="font-size:1.3rem; font-weight:800; margin-top:2px;">—</div>
+      <div id="randomMeta" style="font-size:0.85rem; opacity:0.92;"></div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn" style="background:#fff; color:#0f172a;" onclick="pickRandomStudent()">🔄 Elegir otro</button>
+      <button class="btn" style="background:rgba(255,255,255,0.2); color:#fff;" onclick="document.getElementById('randomBanner').classList.remove('show')">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: REGISTRO DIARIO -->
+  <div id="view-diario">
+    <div class="toolbar no-print">
+      <div class="toolbar-group">
+        <label class="field-label" for="sessionDate">Fecha:</label>
+        <input type="date" id="sessionDate" onchange="onDateChange()" />
+        <span id="dayNamePill" class="day-pill">—</span>
+        <input type="text" id="topicInput" placeholder="Tema de clase / actividad en pizarra..." style="min-width: 260px;" oninput="saveTopic()" />
+      </div>
+
+      <div class="toolbar-group">
+        <button class="btn btn-primary" onclick="markAllPresent()">✅ Todos Presentes (P)</button>
+        <button class="btn btn-accent" onclick="pickRandomStudent()">🎲 Elegir para Pizarra</button>
+        <button class="btn btn-outline" onclick="window.print()">🖨️ Imprimir / PDF</button>
+      </div>
+    </div>
+
+    <div class="toolbar no-print" style="padding: 12px 16px;">
+      <div class="toolbar-group">
+        <label class="field-label" for="searchStudent">Buscar:</label>
+        <input type="text" id="searchStudent" placeholder="Filtrar por apellido o nombre..." oninput="renderDailyTable()" style="min-width: 240px;" />
+      </div>
+      <div class="toolbar-group">
+        <button class="btn btn-outline" onclick="exportCSV()">📥 Exportar CSV (Excel)</button>
+        <button class="btn btn-outline" onclick="exportJSON()">💾 Respaldo JSON</button>
+        <label class="btn btn-outline" style="cursor:pointer;">
+          📂 Restaurar JSON
+          <input type="file" accept=".json" style="display:none;" onchange="importJSON(event)" />
+        </label>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Presentes (P)</div>
+        <div class="value" style="color:var(--p-fg);" id="kpiP">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Atrasos (A)</div>
+        <div class="value" style="color:var(--a-fg);" id="kpiA">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Faltas Injust. (F)</div>
+        <div class="value" style="color:var(--f-fg);" id="kpiF">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Justificadas (J)</div>
+        <div class="value" style="color:var(--j-fg);" id="kpiJ">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Salidas Pizarra Hoy</div>
+        <div class="value" style="color:var(--accent);" id="kpiBoard">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="num-col">#</th>
+              <th>Apellidos y Nombres</th>
+              <th>Asistencia Hoy</th>
+              <th>Participación en Pizarra (Hoy)</th>
+              <th style="text-align:center;">Total Pizarra</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+          <tbody id="dailyTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CONSOLIDADO GENERAL -->
+  <div id="view-resumen" class="hidden">
+    <div class="toolbar no-print">
+      <div class="toolbar-group">
+        <strong style="font-size:1rem;">Resumen Acumulado de Asistencia y Pizarra — 2DO INF "A"</strong>
+        <span id="totalSessionsBadge" class="day-pill">0 clases registradas</span>
+      </div>
+      <div class="toolbar-group">
+        <button class="btn btn-outline" onclick="exportCSV()">📥 Exportar Consolidado CSV</button>
+        <button class="btn btn-outline" onclick="window.print()">🖨️ Imprimir / PDF</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="num-col">#</th>
+              <th>Apellidos y Nombres</th>
+              <th style="text-align:center;">P</th>
+              <th style="text-align:center;">A</th>
+              <th style="text-align:center;">F</th>
+              <th style="text-align:center;">J</th>
+              <th style="text-align:center;">% Asistencia</th>
+              <th style="text-align:center;">Veces en Pizarra</th>
+              <th style="text-align:center;">Promedio Pizarra</th>
+            </tr>
+          </thead>
+          <tbody id="summaryTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: GESTIONAR NOMINA -->
+  <div id="view-nomina" class="hidden">
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <input type="text" id="newStudentName" placeholder="APELLIDOS Y NOMBRES DEL NUEVO ESTUDIANTE" style="min-width: 320px; text-transform: uppercase;" />
+        <button class="btn btn-primary" onclick="addStudent()">➕ Agregar Estudiante</button>
+      </div>
+      <div class="toolbar-group">
+        <button class="btn btn-danger" onclick="resetDefaultRoster()">⚠️ Restablecer Lista Original (30)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="num-col">#</th>
+              <th>Apellidos y Nombres</th>
+              <th style="width:140px; text-align:center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="rosterTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'ena_asistencia_pizarra_2do_inf_a_2026_v1';
+
+  const DEFAULT_STUDENTS = [
+    "AREVALO GUALLPA JUSTIN TAYLOR",
+    "AREVALO GUALLPA XAVI ANDRES",
+    "AVILES CUSME LUCIA SOLAIS",
+    "BUESTAN GUIRACOCHA EDUARDO MIGUEL",
+    "CABANILLA ORELLANA NELSON ALEXANDER",
+    "CARBO JUELA MAYKEL EDUARDO",
+    "CARRASCO DELGADO JORGE ADRIAN",
+    "CEDEÑO AYLLON ANDERSON STEVEN",
+    "CHAVEZ CABRERA GREGORY MATEO",
+    "DUMAGUALA CARRANZA KEYLA PAULET",
+    "ESPINOZA PEREZ JULIANA PAOLA",
+    "FERNANDEZ CUNIN ROUSS MARBELLA",
+    "LANDIN GUAMAN AMY VALERIA",
+    "LUGO YUNGANAULA JENNIFER DANITZA",
+    "MERCHAN PLUAS MARIA JOSE",
+    "MONAR SUCUZHAÑAY OMAR SNADER",
+    "MORAN RODRIGUEZ JEANPIERRE MATIAS",
+    "MORENO JARA KEVIN ALEJANDRO",
+    "MOROCHO GUALPA MERCEDES MAITE",
+    "PASTOR RODRIGUEZ EMILY MELISA",
+    "PINCAY TUQUERRES FRANKLIN STEVEN",
+    "QUIROZ ZAMBRANO MARIA NELLY",
+    "REMACHE MENDOZA LUIS MIGUEL",
+    "ROMERO PLUA MIKE ANTHONY",
+    "SANCHEZ CARDENAS DALIA PAULINA",
+    "SANTOS PALACIOS ANDRES DAVID",
+    "SOLIS CASTRO GABRIEL EDUARDO",
+    "TOBAR TIGRE DARWIN ARIEL",
+    "VERA GARCIA ERICK DANIEL",
+    "ZAMBRANO SALAZAR JAILEIDY MILENA"
+  ];
+
+  let appState = loadState();
+
+  function createInitialState() {
+    return {
+      students: DEFAULT_STUDENTS.map((name, idx) => ({
+        id: 'est_' + (idx + 1),
+        name
+      })),
+      sessions: {} // { 'YYYY-MM-DD': { topic: '', attendance: { id: 'P'|'A'|'F'|'J' }, board: { id: number|null }, notes: { id: '' } } }
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.students) && parsed.sessions) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error('Error leyendo localStorage:', e);
+    }
+    return createInitialState();
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  }
+
+  function getTodayISO() {
+    const now = new Date();
+    const tzOffset = now.getTimezoneOffset() * 60000;
+    return new Date(now - tzOffset).toISOString().split('T')[0];
+  }
+
+  function getCurrentDate() {
+    return document.getElementById('sessionDate').value || getTodayISO();
+  }
+
+  function ensureSession(dateStr) {
+    if (!appState.sessions[dateStr]) {
+      appState.sessions[dateStr] = {
+        topic: '',
+        attendance: {},
+        board: {},
+        notes: {}
+      };
+    }
+    return appState.sessions[dateStr];
+  }
+
+  function updateDayLabel(dateStr) {
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dt = new Date(y, m - 1, d);
+    document.getElementById('dayNamePill').textContent = days[dt.getDay()] || '';
+  }
+
+  function onDateChange() {
+    const dateStr = getCurrentDate();
+    updateDayLabel(dateStr);
+    const session = ensureSession(dateStr);
+    document.getElementById('topicInput').value = session.topic || '';
+    renderDailyTable();
+  }
+
+  function saveTopic() {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+    session.topic = document.getElementById('topicInput').value;
+    saveState();
+  }
+
+  function setAttendance(studentId, status) {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+    if (session.attendance[studentId] === status) {
+      delete session.attendance[studentId];
+    } else {
+      session.attendance[studentId] = status;
+    }
+    saveState();
+    renderDailyTable();
+  }
+
+  function markAllPresent() {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+    appState.students.forEach(st => {
+      session.attendance[st.id] = 'P';
+    });
+    saveState();
+    renderDailyTable();
+  }
+
+  function setBoardScore(studentId, score) {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+    if (session.board[studentId] === score) {
+      delete session.board[studentId];
+    } else {
+      session.board[studentId] = score;
+      if (!session.attendance[studentId]) {
+        session.attendance[studentId] = 'P';
+      }
+    }
+    saveState();
+    renderDailyTable();
+  }
+
+  function setNote(studentId, val) {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+    session.notes[studentId] = val;
+    saveState();
+  }
+
+  function getStudentStats(studentId) {
+    let p = 0, a = 0, f = 0, j = 0, boardCount = 0, boardSum = 0;
+    Object.values(appState.sessions).forEach(sess => {
+      const st = sess.attendance?.[studentId];
+      if (st === 'P') p++;
+      else if (st === 'A') a++;
+      else if (st === 'F') f++;
+      else if (st === 'J') j++;
+
+      const b = sess.board?.[studentId];
+      if (typeof b === 'number') {
+        boardCount++;
+        boardSum += b;
+      }
+    });
+    const totalMarked = p + a + f + j;
+    const pct = totalMarked > 0 ? Math.round(((p + a) / totalMarked) * 100) : 100;
+    const avgBoard = boardCount > 0 ? (boardSum / boardCount).toFixed(2) : '—';
+    return { p, a, f, j, totalMarked, pct, boardCount, avgBoard };
+  }
+
+  function renderDailyTable() {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+    const query = (document.getElementById('searchStudent').value || '').trim().toUpperCase();
+    const tbody = document.getElementById('dailyTableBody');
+    tbody.innerHTML = '';
+
+    let cP = 0, cA = 0, cF = 0, cJ = 0, cB = 0;
+    appState.students.forEach(st => {
+      const att = session.attendance[st.id];
+      if (att === 'P') cP++;
+      else if (att === 'A') cA++;
+      else if (att === 'F') cF++;
+      else if (att === 'J') cJ++;
+      if (typeof session.board[st.id] === 'number') cB++;
+    });
+
+    document.getElementById('kpiP').textContent = cP;
+    document.getElementById('kpiA').textContent = cA;
+    document.getElementById('kpiF').textContent = cF;
+    document.getElementById('kpiJ').textContent = cJ;
+    document.getElementById('kpiBoard').textContent = cB;
+    document.getElementById('headerCount').textContent = `${appState.students.length} Estudiantes Activos`;
+
+    const scores = [10, 9, 8, 7, 1]; // 1 = +1 punto extra / sello
+
+    appState.students.forEach((st, idx) => {
+      if (query && !st.name.toUpperCase().includes(query)) return;
+
+      const att = session.attendance[st.id] || '';
+      const bVal = session.board[st.id];
+      const noteVal = session.notes[st.id] || '';
+      const stats = getStudentStats(st.id);
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="num-col">${idx + 1}</td>
+        <td class="student-name">${st.name}</td>
+        <td>
+          <div class="att-group">
+            ${['P', 'A', 'F', 'J'].map(code => `
+              <button class="att-btn ${att === code ? 'active' : ''}" data-val="${code}"
+                title="${code === 'P' ? 'Presente' : code === 'A' ? 'Atraso' : code === 'F' ? 'Falta Injustificada' : 'Falta Justificada'}"
+                onclick="setAttendance('${st.id}', '${code}')">${code}</button>
+            `).join('')}
+          </div>
+        </td>
+        <td>
+          <div class="board-controls">
+            ${scores.map(sc => `
+              <button class="score-chip ${bVal === sc ? 'selected' : ''}"
+                onclick="setBoardScore('${st.id}', ${sc})">${sc === 1 ? '+1 pt' : sc}</button>
+            `).join('')}
+          </div>
+        </td>
+        <td style="text-align:center;">
+          <span class="count-pill" title="Promedio pizarra: ${stats.avgBoard}">${stats.boardCount}</span>
+        </td>
+        <td>
+          <input type="text" class="obs-input" placeholder="Nota..." value="${escapeHtml(noteVal)}"
+            onchange="setNote('${st.id}', this.value)" />
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderSummaryTable() {
+    const tbody = document.getElementById('summaryTableBody');
+    tbody.innerHTML = '';
+
+    const activeSessions = Object.values(appState.sessions).filter(
+      s => Object.keys(s.attendance || {}).length > 0 || Object.keys(s.board || {}).length > 0
+    );
+    document.getElementById('totalSessionsBadge').textContent = `${activeSessions.length} clases registradas`;
+
+    appState.students.forEach((st, idx) => {
+      const s = getStudentStats(st.id);
+      const pctClass = s.pct >= 85 ? 'pct-high' : s.pct >= 70 ? 'pct-mid' : 'pct-low';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="num-col">${idx + 1}</td>
+        <td class="student-name">${st.name}</td>
+        <td style="text-align:center; font-weight:700; color:var(--p-fg);">${s.p}</td>
+        <td style="text-align:center; font-weight:700; color:var(--a-fg);">${s.a}</td>
+        <td style="text-align:center; font-weight:700; color:var(--f-fg);">${s.f}</td>
+        <td style="text-align:center; font-weight:700; color:var(--j-fg);">${s.j}</td>
+        <td style="text-align:center;"><span class="pill-pct ${pctClass}">${s.pct}%</span></td>
+        <td style="text-align:center;"><span class="count-pill">${s.boardCount}</span></td>
+        <td style="text-align:center; font-weight:700;">${s.avgBoard}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderRosterTable() {
+    const tbody = document.getElementById('rosterTableBody');
+    tbody.innerHTML = '';
+    appState.students.forEach((st, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="num-col">${idx + 1}</td>
+        <td class="student-name">${st.name}</td>
+        <td style="text-align:center;">
+          <button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem;" onclick="removeStudent('${st.id}')">Eliminar</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function addStudent() {
+    const input = document.getElementById('newStudentName');
+    const name = input.value.trim().toUpperCase();
+    if (!name) return;
+    appState.students.push({
+      id: 'est_' + Date.now(),
+      name
+    });
+    appState.students.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+    input.value = '';
+    saveState();
+    renderRosterTable();
+    renderDailyTable();
+  }
+
+  function removeStudent(id) {
+    if (!confirm('¿Desea eliminar a este estudiante de la lista de 2DO INF "A"?')) return;
+    appState.students = appState.students.filter(s => s.id !== id);
+    saveState();
+    renderRosterTable();
+    renderDailyTable();
+  }
+
+  function resetDefaultRoster() {
+    if (!confirm('¿Restablecer la nómina original de los 30 estudiantes de 2DO INF "A"? (Se conservarán los registros de fechas).')) return;
+    appState.students = DEFAULT_STUDENTS.map((name, idx) => ({
+      id: 'est_' + (idx + 1),
+      name
+    }));
+    saveState();
+    renderRosterTable();
+    renderDailyTable();
+  }
+
+  function pickRandomStudent() {
+    const dateStr = getCurrentDate();
+    const session = ensureSession(dateStr);
+
+    // Prioriza estudiantes que NO tengan falta hoy y que tengan menos salidas a pizarra
+    const eligible = appState.students.filter(st => {
+      const att = session.attendance[st.id];
+      return att !== 'F' && att !== 'J';
+    });
+
+    const pool = eligible.length > 0 ? eligible : appState.students;
+    if (pool.length === 0) return;
+
+    const withStats = pool.map(st => ({
+      ...st,
+      stats: getStudentStats(st.id)
+    }));
+
+    const minBoard = Math.min(...withStats.map(x => x.stats.boardCount));
+    const candidates = withStats.filter(x => x.stats.boardCount === minBoard);
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+
+    document.getElementById('randomName').textContent = chosen.name;
+    document.getElementById('randomMeta').textContent =
+      `Salidas acumuladas a la pizarra: ${chosen.stats.boardCount} • Promedio: ${chosen.stats.avgBoard}`;
+    document.getElementById('randomBanner').classList.add('show');
+  }
+
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.getElementById('view-diario').classList.add('hidden');
+    document.getElementById('view-resumen').classList.add('hidden');
+    document.getElementById('view-nomina').classList.add('hidden');
+
+    document.getElementById('view-' + tab).classList.remove('hidden');
+
+    if (tab === 'diario') renderDailyTable();
+    else if (tab === 'resumen') renderSummaryTable();
+    else if (tab === 'nomina') renderRosterTable();
+  }
+
+  function exportCSV() {
+    const dates = Object.keys(appState.sessions).sort();
+    const headers = ['#', 'APELLIDOS Y NOMBRES', 'P', 'A', 'F', 'J', '% ASISTENCIA', 'VECES PIZARRA', 'PROMEDIO PIZARRA', ...dates];
+    const rows = [headers];
+
+    appState.students.forEach((st, idx) => {
+      const s = getStudentStats(st.id);
+      const dayCols = dates.map(d => {
+        const sess = appState.sessions[d];
+        const att = sess.attendance?.[st.id] || '';
+        const brd = typeof sess.board?.[st.id] === 'number' ? ` (Piz:${sess.board[st.id]})` : '';
+        return att + brd;
+      });
+      rows.push([
+        idx + 1,
+        `"${st.name}"`,
+        s.p, s.a, s.f, s.j,
+        `${s.pct}%`,
+        s.boardCount,
+        s.avgBoard,
+        ...dayCols.map(v => `"${v}"`)
+      ]);
+    });
+
+    const csvContent = '\uFEFF' + rows.map(r => r.join(';')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Asistencia_Pizarra_2DO_INF_A_${getCurrentDate()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Respaldo_2DO_INF_A_${getCurrentDate()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data && Array.isArray(data.students) && data.sessions) {
+          appState = data;
+          saveState();
+          onDateChange();
+          alert('Respaldo de 2DO INF "A" restaurado correctamente.');
+        } else {
+          alert('El archivo seleccionado no tiene el formato válido.');
+        }
+      } catch (err) {
+        alert('Error al leer el archivo JSON.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Inicialización
+  document.getElementById('sessionDate').value = getTodayISO();
+  onDateChange();
+</script>
+</body>
+</html>
